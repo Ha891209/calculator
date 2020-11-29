@@ -24,16 +24,15 @@ document
     .forEach(item => item.addEventListener('click', () => writeToInput(item.textContent)));
 
 const signToMemory = (text) => {
-        if (inputNumber.length === 0) {
-            inputNumber.push(parseFloat(input.value));
-            console.log(inputNumber[0]);
-        } else {
-            calculate();
+        inputNumber.push(parseFloat(input.value));
+        console.log(input.value);
+        if (inputNumber.length > 1) {
+            calculate();            
         }
         input.value = '';
         writeToInput(text);
         memory = text;
-    }    
+    }
 document
         .querySelectorAll('.sign')
         .forEach(item => item.addEventListener('click', () => signToMemory(item.textContent)));
