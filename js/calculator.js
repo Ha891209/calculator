@@ -10,38 +10,58 @@
 //A C gomb törli az input mező tartamát
 
 'use strict';
-
-const input = document.querySelector('.calculator__screen');
-const numbers = document.querySelectorAll('.numbers');
-const operator = document.querySelectorAll('.sign');
-const equal = document.querySelector('.equal');
-const del = document.querySelector('.numbers delete');
+const input = document.querySelector('input');
 let inputText;
 let inputNumber = [];
-let content;
+let memory;
 let result = {};
-
-const calculate = () => {
-    inputNumbers.push(parseFloat(input.value.slice(1)));
-    result = {
-        '+': inputNumbers.reduce((prev, current) => (prev + current)),
-        '-': inputNumbers.reduce((prev, current) => (prev - current)),
-        'x': inputNumbers.reduce((prev, current) => (prev * current)),
-        '÷': inputNumbers.reduce((prev, current) => (prev / current))
-    };
-    inputNumbers.splice(0, 2, result[content]);
-    
-    if (isNaN(result[content]) === true) {
-        result[content] = 'ERROR';
-    }
-    input.value = result[content];
+const writeToInput = (text) => {
+    inputText = (input.value);
+    input.value = inputText + text;
 }
+document
+    .querySelectorAll('.numbers')
+    .forEach(item => item.addEventListener('click', () => writeToInput(item.textContent)));
 
-const resetCalculator = () => {
-    input.value = '';
-    result = 0;
-    inputNumbers = [];
-};
+const signToMemory = (text) => {
+        if (inputNumber.length === 0) {
+            inputNumber.push(parseFloat(input.value));
+            console.log(inputNumber[0]);
+        } else {
+            calculate();
+        }
+        input.value = '';
+        writeToInput(text);
+        memory = text;
+    }    
+document
+        .querySelectorAll('.sign')
+        .forEach(item => item.addEventListener('click', () => signToMemory(item.textContent)));
+    
+const calculate = () => {
+            inputNumber.push(parseFloat(input.value.slice(1)));
+            result = {
+                '+': inputNumber.reduce((prev, current) => (prev + current)),
+                '-': inputNumber.reduce((prev, current) => (prev - current)),
+                'x': inputNumber.reduce((prev, current) => (prev * current)),
+                '÷': inputNumber.reduce((prev, current) => (prev / current)),
+            }
+            inputNumber.splice(0, 2, result[memory]);
+            if (Number.isNaN(result[memory])) {
+                input.value = 'Error';
+            } else {
+                input.value = result[memory];
+            }
+        }        
+document
+            .querySelector('.equal')
+            .addEventListener('click', calculate);
 
-console.log(calculate);
-console.log(resetCalculator);
+const deleteBtn = () => {
+                input.value = '';
+                result = 0;
+                inputNumber = [];
+            }
+document
+            .querySelector('.delete')
+            .addEventListener('click', deleteBtn);    
